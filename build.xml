@@ -2,6 +2,7 @@
 
 <project name="joomla" default="build" basedir=".">
 	<property name="source" value="." />
+	<property name="basedir" value="." />
 	<property name="joomlasource" value="administrator,cli,components,includes,installation,language/en-GB,libraries/cms,modules,plugins,templates" />
 
 	<target name="clean" description="Clean up and create artifact directories">
@@ -162,5 +163,23 @@
 		<zip destfile="${basedir}/build/com_joomlaupdate-pkg/packages/com_joomlaupdate.zip" basedir="${basedir}/build/com_joomlaupdate-pkg/staging" />
 	</target>
 
-	<target name="build" depends="clean,phpunit,parallelTasks" />
+	<target name="composer" description="Installing dependencies" depends="clean">
+		<!-- Remove old vendor libraries -->
+		<delete dir="${basedir}/libraries/vendor" />
+
+		<if>
+			<not>
+				<available file="{basedir}/composer.phar" type="file" />
+			</not>
+			<then>
+				<exec command="curl --retry 3 --retry-delay 5 -sS https://getcomposer.org/installer | php" />
+			</then>
+		</if>
+
+		<!-- Use composer for download required libraries -->
+		<composer command="install">
+		</composer>
+	</target>
+
+	<target name="build" depends="composer,phpunit,parallelTasks" />
 </project>
