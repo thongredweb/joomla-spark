@@ -1,24 +1,18 @@
 {
-    "name": "joomla/joomla-cms",
+    "name": "joomladevelopers/spark",
     "type": "project",
-    "description": "Joomla CMS",
-    "keywords": ["joomla", "cms"],
-    "homepage": "https://github.com/joomla/joomla-cms",
+    "description": "Joomla Spark is a Joomla distribution for developers by developers. The aim of this project is to create a lightweight Joomla core distro, moving extensions into seperate repositories, while maintaining 100% compatibility.",
+    "keywords": ["joomla", "cms", "spark"],
+    "homepage": "https://github.com/joomladevelopers/joomla-spark",
     "license": "GPL-2.0+",
     "config": {
         "platform": {
-            "php": "5.5"
+            "php": "5.4"
         },
         "vendor-dir": "libraries/vendor"
     },
-    "support": {
-        "issues":"https://issues.joomla.org",
-        "irc":"http://irc.lc/freenode/joomla/",
-        "forum":"http://forum.joomla.org/",
-        "docs":"https://docs.joomla.org"
-    },
     "require": {
-        "php": ">=5.5",
+        "php": ">=5.4",
         "joomla/application": "~1.5",
         "joomla/di": "~1.2",
         "joomla/event": "~1.1",
