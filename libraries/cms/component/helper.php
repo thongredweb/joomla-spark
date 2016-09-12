@@ -29,18 +29,19 @@ class JComponentHelper
 	/**
 	 * Get the component information.
 	 *
-	 * @param   string   $option  The component option.
-	 * @param   boolean  $strict  If set and the component does not exist, the enabled attribute will be set to false.
+	 * @param   string   $option   The component option.
+	 * @param   boolean  $strict   If set and the component does not exist, the enabled attribute will be set to false.
+	 * @param   boolean  $showLog  True for use JError to show log. False for just return result.
 	 *
 	 * @return  stdClass   An object with the information for the component.
 	 *
 	 * @since   1.5
 	 */
-	public static function getComponent($option, $strict = false)
+	public static function getComponent($option, $strict = false, $showLog = true)
 	{
 		if (!isset(static::$components[$option]))
 		{
-			if (static::load($option))
+			if (static::load($option, $showLog))
 			{
 				$result = static::$components[$option];
 			}
@@ -77,7 +78,7 @@ class JComponentHelper
 	 */
 	public static function isEnabled($option)
 	{
-		$result = static::getComponent($option, true);
+		$result = static::getComponent($option, true, false);
 
 		return $result->enabled;
 	}
@@ -426,13 +427,14 @@ class JComponentHelper
 	/**
 	 * Load the installed components into the components property.
 	 *
-	 * @param   string  $option  The element value for the extension
+	 * @param   string   $option    The element value for the extension
+	 * @param   boolean  $showLog   True for use JError to show warning about extension.
 	 *
 	 * @return  boolean  True on success
 	 *
 	 * @since   3.2
 	 */
-	protected static function load($option)
+	protected static function load($option, $showLog = true)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)
@@ -462,6 +464,12 @@ class JComponentHelper
 		}
 		catch (RuntimeException $e)
 		{
+			// If not use JError for show log, return result.
+			if (!$showLog)
+			{
+				return false;
+			}
+
 			/*
 			 * Fatal error
 			 *
@@ -485,6 +493,12 @@ class JComponentHelper
 
 		if (empty(static::$components[$option]))
 		{
+			// If not use JError for show log, return result.
+			if (!$showLog)
+			{
+				return false;
+			}
+
 			/*
 			 * Fatal error
 			 *
